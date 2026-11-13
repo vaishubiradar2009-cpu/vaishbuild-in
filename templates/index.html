@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare AI - Intelligent Healthcare Platform</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏥</text></svg>">
+</head>
+<body>
+
+    <!-- ====================================================================
+         Navbar
+         ==================================================================== -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand-wrapper" onclick="window.appController.switchTab('dashboard')">
+                <div class="brand-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20M2 12h20"></path>
+                    </svg>
+                </div>
+                <div>
+                    <div class="brand-title">MediCare <span>AI</span></div>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <!-- Language Switcher -->
+                <div class="lang-dropdown-wrapper">
+                    <select id="language-select" class="lang-select" aria-label="Select Language">
+                        <option value="en">English</option>
+                        <option value="hi">हिंदी (Hindi)</option>
+                        <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                    </select>
+                </div>
+
+                <!-- Emergency SOS Callout -->
+                <button class="sos-header-btn" onclick="window.appController.switchTab('emergency')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    <span data-i18n="sosButton">Emergency SOS (108)</span>
+                </button>
+
+                <!-- Patient Profile Pill -->
+                <div class="user-badge">
+                    <div class="user-avatar">AS</div>
+                    <span>Aditi Sharma</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Top Medical Disclaimer Alert -->
+    <div class="disclaimer-banner">
+        <span>⚠️</span>
+        <span data-i18n="topDisclaimer">
+            MediCare AI is an assistive informational platform. It does not provide medical diagnoses or replace licensed physicians. In an emergency, call 108 or 112 immediately.
+        </span>
+    </div>
+
+    <!-- Navigation Tabs Bar -->
+    <nav class="nav-tabs-wrapper">
+        <div class="nav-tabs">
+            <button class="nav-tab-btn active" data-tab="dashboard">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                <span data-i18n="navDashboard">Dashboard</span>
+            </button>
+            <button class="nav-tab-btn" data-tab="chatbot">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                <span data-i18n="navChatbot">AI Health Chatbot</span>
+            </button>
+            <button class="nav-tab-btn" data-tab="symptoms">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span data-i18n="navSymptoms">Symptom Checker</span>
+            </button>
+            <button class="nav-tab-btn" data-tab="appointments">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span data-i18n="navAppointments">Book Doctor</span>
+            </button>
+            <button class="nav-tab-btn" data-tab="medicines">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10.5 20.5l10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"></path><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"></line></svg>
+                <span data-i18n="navMedicines">Medicine Reminders</span>
+            </button>
+            <button class="nav-tab-btn" data-tab="articles">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                <span data-i18n="navArticles">Health Articles</span>
+            </button>
+            <button class="nav-tab-btn" data-tab="emergency">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                <span data-i18n="navEmergency">Emergency Info</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="app-container">
+
+        <!-- ====================================================================
+             1. Dashboard Tab Pane
+             ==================================================================== -->
+        <section id="tab-dashboard" class="tab-pane active">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title" data-i18n="dashWelcome">Welcome back, Aditi</h1>
+                    <p class="section-subtitle" data-i18n="dashSubtitle">Here is your personal health overview and upcoming schedule.</p>
+                </div>
+                <button id="open-vitals-modal-btn" class="btn btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    <span data-i18n="dashLogVitalsBtn">Log Vitals</span>
+                </button>
+            </div>
+
+            <!-- Dashboard Summary Stat Cards -->
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon teal">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label" data-i18n="dashScoreTitle">Medication Adherence</div>
+                        <div id="dash-compliance-value" class="stat-value">100%</div>
+                        <div class="stat-desc" data-i18n="dashScoreDesc">Daily medicine compliance</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.5 20.5l10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"></path><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"></line></svg>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label" data-i18n="dashActiveReminders">Active Reminders</div>
+                        <div id="dash-active-meds-count" class="stat-value">3</div>
+                        <div class="stat-desc">Scheduled for today</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label" data-i18n="dashNextAppt">Next Consultation</div>
+                        <div id="dash-next-appt-summary" class="stat-value" style="font-size: 1.15rem; font-weight: 700;">Loading...</div>
+                        <div class="stat-desc">Scheduled in clinic</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon amber">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-label" data-i18n="dashRecentCheck">Recent Symptom Check</div>
+                        <div id="dash-recent-symptom-summary" class="stat-value" style="font-size: 1.15rem; font-weight: 700;">Low Priority • General</div>
+                        <div class="stat-desc">AI Triage history</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two-Column Layout -->
+            <div class="dashboard-layout">
+                <div>
+                    <!-- Vitals Metrics Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                                <span data-i18n="dashVitalsTitle">Personal Vitals</span>
+                            </div>
+                            <span class="vital-badge normal">Optimal Status</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="vitals-grid">
+                                <div class="vital-tile">
+                                    <div class="metric-title" data-i18n="vitalBP">Blood Pressure</div>
+                                    <div id="dash-vital-bp" class="metric-val">118/78 mmHg</div>
+                                    <span class="vital-badge normal">Normal</span>
+                                </div>
+                                <div class="vital-tile">
+                                    <div class="metric-title" data-i18n="vitalHeartRate">Heart Rate</div>
+                                    <div id="dash-vital-hr" class="metric-val">72 bpm</div>
+                                    <span class="vital-badge normal">Resting</span>
+                                </div>
+                                <div class="vital-tile">
+                                    <div class="metric-title" data-i18n="vitalSugar">Fasting Blood Sugar</div>
+                                    <div id="dash-vital-sugar" class="metric-val">94.0 mg/dL</div>
+                                    <span class="vital-badge normal">Optimal</span>
+                                </div>
+                                <div class="vital-tile">
+                                    <div class="metric-title" data-i18n="vitalWeight">Weight & BMI</div>
+                                    <div id="dash-vital-bmi" class="metric-val">62.5 kg (23.0)</div>
+                                    <span class="vital-badge normal">Healthy</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Appointments Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                <span data-i18n="dashUpcomingApptsTitle">Upcoming Appointments</span>
+                            </div>
+                            <button class="btn btn-secondary" onclick="window.appController.switchTab('appointments')" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;">
+                                + Book New
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="dash-upcoming-appts-list">
+                                <p style="color: var(--text-muted); font-size: 0.9rem;">Loading scheduled visits...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Today's Meds & Quick Actions -->
+                <div>
+                    <!-- Today's Medicines Schedule -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M10.5 20.5l10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"></path><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"></line></svg>
+                                <span data-i18n="dashTodayMedsTitle">Today's Medication Schedule</span>
+                            </div>
+                            <button class="btn btn-secondary" onclick="window.appController.switchTab('medicines')" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;">
+                                View All
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="dash-today-meds-list">
+                                <p style="color: var(--text-muted); font-size: 0.9rem;">Loading medication schedule...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Tools Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title" data-i18n="dashQuickActionsTitle">Quick AI Tools</div>
+                        </div>
+                        <div class="card-body" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <button class="btn btn-primary" onclick="window.appController.switchTab('chatbot')" style="justify-content: flex-start;">
+                                💬 <span data-i18n="navChatbot">AI Health Chatbot</span>
+                            </button>
+                            <button class="btn btn-secondary" onclick="window.appController.switchTab('symptoms')" style="justify-content: flex-start;">
+                                🔍 <span data-i18n="navSymptoms">Symptom Checker</span>
+                            </button>
+                            <button class="btn btn-teal" onclick="window.appController.switchTab('emergency')" style="justify-content: flex-start;">
+                                🚨 <span data-i18n="navEmergency">Emergency Information</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====================================================================
+             2. AI Health Chatbot Tab Pane
+             ==================================================================== -->
+        <section id="tab-chatbot" class="tab-pane">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title" data-i18n="chatTitle">MediCare AI Health Assistant</h1>
+                    <p class="section-subtitle" data-i18n="chatSubtitle">Powered by Gemini API • Informational Guidance Only</p>
+                </div>
+                <button id="chat-clear-btn" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.45rem 0.9rem;">
+                    🗑️ <span data-i18n="chatClear">Clear Chat</span>
+                </button>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-header-info">
+                        <div class="chat-ai-avatar">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"></path></svg>
+                        </div>
+                        <div>
+                            <div style="font-weight: 700; font-size: 1.05rem;">MediCare Clinical Assistant</div>
+                            <div style="font-size: 0.8rem; opacity: 0.9;">Multilingual AI Support • EN, HI, KN</div>
+                        </div>
+                    </div>
+                    <span class="vital-badge" style="background: rgba(255,255,255,0.25); color: white;">Online</span>
+                </div>
+
+                <!-- Chat Messages Stream -->
+                <div id="chat-messages" class="chat-messages">
+                    <!-- Dynamic chat bubbles inserted here -->
+                </div>
+
+                <!-- Suggested Query Chips -->
+                <div id="chat-suggestions" class="chat-suggestions">
+                    <span style="font-size: 0.8rem; font-weight: bold; color: var(--text-muted); align-self: center;" data-i18n="chatSuggested">Quick Questions:</span>
+                    <button class="suggestion-chip" data-prompt="What to do for a mild fever?" data-i18n="promptFever">What to do for a mild fever?</button>
+                    <button class="suggestion-chip" data-prompt="What is a healthy blood pressure range?" data-i18n="promptBP">What is a healthy blood pressure range?</button>
+                    <button class="suggestion-chip" data-prompt="Comfort measures for lower back pain" data-i18n="promptBackPain">Comfort measures for lower back pain</button>
+                    <button class="suggestion-chip" data-prompt="Signs of heat dehydration and care" data-i18n="promptDehydration">Signs of heat dehydration and care</button>
+                </div>
+
+                <!-- Chat Input Form -->
+                <div class="chat-input-bar">
+                    <input type="text" id="chat-input" class="chat-input" placeholder="Ask about symptoms, wellness tips, or medications..." data-i18n="chatPlaceholder" autocomplete="off">
+                    <button id="chat-send-btn" class="chat-send-btn" aria-label="Send message">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====================================================================
+             3. Symptom Checker Tab Pane
+             ==================================================================== -->
+        <section id="tab-symptoms" class="tab-pane">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title" data-i18n="symptomTitle">AI Symptom Information Checker</h1>
+                    <p class="section-subtitle" data-i18n="symptomSubtitle">Describe your discomfort for triage urgency and recommended next steps.</p>
+                </div>
+            </div>
+
+            <div class="symptom-checker-grid">
+                <!-- Left: Symptom Input Form -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                            <span>Symptom Assessment Form</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form id="symptom-form">
+                            <div class="form-group">
+                                <label class="form-label" for="symptom-desc" data-i18n="symptomDescLabel">Describe Your Symptoms</label>
+                                <textarea id="symptom-desc" class="form-control" placeholder="E.g., persistent dry cough for 3 days, mild headache, and fatigue..." data-i18n="symptomDescPlaceholder" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="symptom-duration" data-i18n="symptomDurationLabel">Duration</label>
+                                <select id="symptom-duration" class="form-control">
+                                    <option value="Less than 24 hours">Less than 24 hours</option>
+                                    <option value="1-2 days" selected>1-2 days</option>
+                                    <option value="3-5 days">3-5 days</option>
+                                    <option value="More than a week">More than a week</option>
+                                    <option value="Ongoing / Chronic">Ongoing / Chronic</option>
+                                </select>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div class="form-group">
+                                    <label class="form-label" for="symptom-severity" data-i18n="symptomSeverityLabel">Severity Level</label>
+                                    <select id="symptom-severity" class="form-control">
+                                        <option value="Mild" selected>Mild (Tolerable)</option>
+                                        <option value="Moderate">Moderate (Impacting daily routine)</option>
+                                        <option value="Severe">Severe (Intense pain/distress)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="symptom-age" data-i18n="symptomAgeLabel">Age Group</label>
+                                    <select id="symptom-age" class="form-control">
+                                        <option value="Adult (18-64)" selected>Adult (18-64)</option>
+                                        <option value="Child / Teen (0-17)">Child / Teen (0-17)</option>
+                                        <option value="Senior (65+)">Senior (65+)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button type="submit" id="symptom-submit-btn" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                <span data-i18n="symptomSubmitBtn">Analyze Symptoms with AI</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Right: Assessment Results Area -->
+                <div>
+                    <!-- Loading state -->
+                    <div id="symptom-loading" style="display: none; text-align: center; padding: 4rem 1rem; background: white; border-radius: var(--radius-lg); border: 1px solid var(--border);">
+                        <div class="typing-indicator" style="margin: 0 auto 1rem;">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                        <div style="font-weight: 700; color: var(--text-primary);" data-i18n="symptomAnalyzing">Analyzing your symptoms safely...</div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Applying clinical triage knowledge and safety checks.</p>
+                    </div>
+
+                    <!-- Result Card -->
+                    <div id="symptom-results-container" class="card" style="display: none;">
+                        <!-- Dynamically filled by symptom_checker.js -->
+                    </div>
+
+                    <!-- Placeholder before check -->
+                    <div id="symptom-placeholder" style="text-align: center; padding: 4rem 2rem; background: white; border: 1px dashed var(--border); border-radius: var(--radius-lg);">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5" style="margin-bottom: 1rem;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">Ready for Assessment</h3>
+                        <p style="font-size: 0.875rem; color: var(--text-secondary); max-width: 380px; margin: 0 auto; line-height: 1.6;">
+                            Enter your symptoms on the left to receive non-diagnostic guidance, urgency triage, home comfort measures, and specialist recommendations.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====================================================================
+             4. Doctor Appointments Tab Pane
+             ==================================================================== -->
+        <section id="tab-appointments" class="tab-pane">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title" data-i18n="doctorsTitle">Find & Book Verified Doctors</h1>
+                    <p class="section-subtitle" data-i18n="doctorsSubtitle">Consult leading specialists in Bengaluru and nearby regions.</p>
+                </div>
+            </div>
+
+            <!-- Specialty Filter Pills -->
+            <div id="specialty-filters" class="filter-pills">
+                <button class="filter-pill active" data-specialty="All" data-i18n="filterAll">All Specialties</button>
+                <button class="filter-pill" data-specialty="Cardiology">Cardiology</button>
+                <button class="filter-pill" data-specialty="General Medicine">General Medicine</button>
+                <button class="filter-pill" data-specialty="Pediatrics">Pediatrics</button>
+                <button class="filter-pill" data-specialty="Dermatology">Dermatology</button>
+                <button class="filter-pill" data-specialty="Orthopedics">Orthopedics</button>
+                <button class="filter-pill" data-specialty="Neurology">Neurology</button>
+                <button class="filter-pill" data-specialty="Psychiatry">Psychiatry</button>
+                <button class="filter-pill" data-specialty="Gynecology">Gynecology</button>
+            </div>
+
+            <!-- Doctors Grid -->
+            <div id="doctors-grid" class="doctors-grid">
+                <!-- Dynamically populated by appointments.js -->
+            </div>
+        </section>
+
+        <!-- ====================================================================
+             5. Medicine Reminders Tab Pane
+             ==================================================================== -->
+        <section id="tab-medicines" class="tab-pane">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title" data-i18n="medsTitle">Medicine Reminders & Schedule</h1>
+                    <p class="section-subtitle" data-i18n="medsSubtitle">Keep track of daily prescriptions and never miss a dose.</p>
+                </div>
+                <button id="open-add-med-btn" class="btn btn-teal">
+                    <span data-i18n="addMedBtn">+ Add Reminder</span>
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2"><path d="M10.5 20.5l10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"></path><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"></line></svg>
+                        <span>Active Medication Schedule</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="medicine-reminders-list" class="medicine-list">
+                        <!-- Dynamically populated by reminders.js -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====================================================================
+             6. Health Articles Tab Pane
+             ==================================================================== -->
+        <section id="tab-articles" class="tab-pane">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title" data-i18n="articlesTitle">Evidence-Based Health Articles</h1>
+                    <p class="section-subtitle" data-i18n="articlesSubtitle">Curated medical insights reviewed by healthcare professionals.</p>
+                </div>
+                <div style="width: 280px;">
+                    <input type="text" id="article-search-input" class="form-control" placeholder="Search articles..." data-i18n="searchArticles">
+                </div>
+            </div>
+
+            <!-- Category Pills -->
+            <div id="article-categories" class="filter-pills">
+                <button class="filter-pill active" data-category="All" data-i18n="filterAll">All</button>
+                <button class="filter-pill" data-category="Heart Health">Heart Health</button>
+                <button class="filter-pill" data-category="Diabetes">Diabetes</button>
+                <button class="filter-pill" data-category="Mental Health">Mental Health</button>
+                <button class="filter-pill" data-category="Seasonal Care">Seasonal Care</button>
+            </div>
+
+            <!-- Articles Grid -->
+            <div id="articles-grid" class="articles-grid">
+                <!-- Dynamically populated by articles.js -->
+            </div>
+        </section>
+
+        <!-- ====================================================================
+             7. Emergency Information Tab Pane
+             ==================================================================== -->
+        <section id="tab-emergency" class="tab-pane">
+            <!-- Emergency Hero Banner -->
+            <div class="emergency-banner-hero">
+                <div class="emergency-hero-text">
+                    <h2 data-i18n="emergencyHeroTitle">Need Immediate Medical Help?</h2>
+                    <p style="font-size: 1rem; opacity: 0.95; max-width: 600px;" data-i18n="emergencyHeroDesc">
+                        If you or someone around you is in critical condition, dial emergency services immediately.
+                    </p>
+                </div>
+                <a href="tel:108" class="btn" style="background: white; color: var(--danger); font-size: 1.15rem; font-weight: 800; padding: 0.9rem 1.75rem; text-decoration: none; border-radius: var(--radius-full); box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
+                    📞 <span data-i18n="emergencyDialNow">Dial 108 Ambulance</span>
+                </a>
+            </div>
+
+            <!-- 24/7 Helplines Grid -->
+            <div class="section-header">
+                <h2 class="section-title">24/7 Verified Helplines</h2>
+            </div>
+            <div id="emergency-contacts-grid" class="emergency-contacts-grid">
+                <!-- Dynamically populated by emergency.js -->
+            </div>
+
+            <!-- First Aid Quick Guide -->
+            <div class="card" style="margin-top: 2rem;">
+                <div class="card-header">
+                    <div class="card-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2"><path d="M12 2v20M2 12h20"></path></svg>
+                        <span data-i18n="firstAidTitle">First Aid Quick Guide</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- First Aid Tabs -->
+                    <div class="first-aid-tabs">
+                        <button class="filter-pill active first-aid-tab-btn" data-topic="cpr" data-i18n="firstAidCPR">CPR (Adult)</button>
+                        <button class="filter-pill first-aid-tab-btn" data-topic="choking" data-i18n="firstAidChoking">Choking Relief</button>
+                        <button class="filter-pill first-aid-tab-btn" data-topic="bleeding" data-i18n="firstAidBleeding">Severe Bleeding</button>
+                        <button class="filter-pill first-aid-tab-btn" data-topic="stroke" data-i18n="firstAidStroke">Stroke (FAST Signs)</button>
+                    </div>
+
+                    <div id="first-aid-content" style="margin-top: 1.5rem;">
+                        <!-- Dynamically populated by emergency.js -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ====================================================================
+         Modals
+         ==================================================================== -->
+
+    <!-- 1. Doctor Appointment Booking Modal -->
+    <div id="booking-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title" data-i18n="modalBookTitle">Schedule Doctor Consultation</h3>
+                <button id="modal-close-btn" class="modal-close">&times;</button>
+            </div>
+            <form id="booking-form">
+                <div class="modal-body">
+                    <div id="modal-doctor-summary"></div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="modal-patient-name" data-i18n="patientNameLabel">Patient Name</label>
+                        <input type="text" id="modal-patient-name" class="form-control" value="Aditi Sharma" required>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label" for="modal-patient-phone" data-i18n="patientPhoneLabel">Phone Number</label>
+                            <input type="tel" id="modal-patient-phone" class="form-control" value="+91 98765 43210" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="modal-patient-email" data-i18n="patientEmailLabel">Email Address</label>
+                            <input type="email" id="modal-patient-email" class="form-control" value="aditi.sharma@example.com">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label" for="modal-appt-date" data-i18n="apptDateLabel">Appointment Date</label>
+                            <input type="date" id="modal-appt-date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="modal-time-slot" data-i18n="apptTimeLabel">Preferred Time Slot</label>
+                            <select id="modal-time-slot" class="form-control" required></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="modal-appt-reason" data-i18n="apptReasonLabel">Reason for Visit</label>
+                        <input type="text" id="modal-appt-reason" class="form-control" placeholder="E.g., Routine health checkup, persistent headache">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="modal-cancel-btn" class="btn btn-secondary" data-i18n="cancelBookingBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" data-i18n="confirmBookingBtn">Confirm Booking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. Add Medicine Reminder Modal -->
+    <div id="add-medicine-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Medicine Reminder</h3>
+                <button id="close-med-modal-btn" class="modal-close">&times;</button>
+            </div>
+            <form id="add-medicine-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label" for="new-med-name" data-i18n="medNameLabel">Medicine Name</label>
+                        <input type="text" id="new-med-name" class="form-control" placeholder="E.g., Metformin, Paracetamol" required>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label" for="new-med-dosage" data-i18n="medDosageLabel">Dosage</label>
+                            <input type="text" id="new-med-dosage" class="form-control" placeholder="E.g., 500 mg, 1 tablet" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="new-med-freq" data-i18n="medFreqLabel">Frequency</label>
+                            <select id="new-med-freq" class="form-control">
+                                <option value="Daily">Daily</option>
+                                <option value="Twice daily">Twice daily</option>
+                                <option value="Weekly">Weekly</option>
+                                <option value="As needed">As needed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label" for="new-med-time" data-i18n="medTimeLabel">Reminder Time</label>
+                            <input type="text" id="new-med-time" class="form-control" value="09:00 AM" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="new-med-relation" data-i18n="medRelationLabel">Meal Relation</label>
+                            <select id="new-med-relation" class="form-control">
+                                <option value="after_food" data-i18n="medAfterFood">After Food</option>
+                                <option value="before_food" data-i18n="medBeforeFood">Before Food</option>
+                                <option value="with_food" data-i18n="medWithFood">With Food</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="new-med-notes">Notes / Instructions</label>
+                        <input type="text" id="new-med-notes" class="form-control" placeholder="E.g., Drink with a full glass of water">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="cancel-med-modal-btn" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-teal">Save Reminder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. Log Health Vitals Modal -->
+    <div id="vitals-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">Record Health Vitals</h3>
+                <button id="close-vitals-modal-btn" class="modal-close">&times;</button>
+            </div>
+            <form id="vitals-form">
+                <div class="modal-body">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">BP Systolic (mmHg)</label>
+                            <input type="number" id="vital-input-sys" class="form-control" value="118" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">BP Diastolic (mmHg)</label>
+                            <input type="number" id="vital-input-dia" class="form-control" value="78" required>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Heart Rate (bpm)</label>
+                            <input type="number" id="vital-input-hr" class="form-control" value="72" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Fasting Sugar (mg/dL)</label>
+                            <input type="number" step="0.1" id="vital-input-sugar" class="form-control" value="94.0" required>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Weight (kg)</label>
+                            <input type="number" step="0.5" id="vital-input-weight" class="form-control" value="62.5" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Height (cm)</label>
+                            <input type="number" step="1" id="vital-input-height" class="form-control" value="165" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="cancel-vitals-modal-btn" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Vitals</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. Article Detail Reader Modal -->
+    <div id="article-detail-modal" class="modal-overlay">
+        <div class="modal-dialog" style="max-width: 720px;">
+            <div class="modal-header">
+                <h3 id="article-modal-title" class="modal-title">Article</h3>
+                <button id="article-modal-close" class="modal-close">&times;</button>
+            </div>
+            <div id="article-modal-body" class="modal-body">
+                <!-- Dynamically loaded -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="window.articlesController.closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====================================================================
+         Footer
+         ==================================================================== -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-disclaimer">
+                <strong style="color: var(--text-primary);">Notice & Clinical Disclaimer:</strong><br>
+                <span data-i18n="footerDisclaimer">
+                    MediCare AI is strictly designed to augment healthcare literacy. It does not replace professional clinical evaluation, medical testing, diagnosis, or treatment. Always consult a certified medical practitioner for health decisions.
+                </span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; font-size: 0.8rem;">
+                <div>&copy; 2026 MediCare AI Healthcare Technologies. All rights reserved.</div>
+                <div>Patient Privacy & Confidentiality Protected • Powered by Google Gemini API & Supabase PostgreSQL</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Modules -->
+    <script src="/static/js/translations.js"></script>
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/chatbot.js"></script>
+    <script src="/static/js/symptom_checker.js"></script>
+    <script src="/static/js/appointments.js"></script>
+    <script src="/static/js/reminders.js"></script>
+    <script src="/static/js/articles.js"></script>
+    <script src="/static/js/emergency.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

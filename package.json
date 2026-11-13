@@ -1,0 +1,25 @@
+{
+  "name": "medicare-ai",
+  "version": "1.0.0",
+  "description": "MediCare AI - Modern Healthcare Platform with Gemini AI, multilingual support, and Supabase PostgreSQL",
+  "main": "scripts/migrate.js",
+  "scripts": {
+    "migrate": "node scripts/migrate.js",
+    "test-connection": "node -e \"console.log('Testing Supabase Configuration...')\""
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "dotenv": "^16.4.5",
+    "pg": "^8.13.0"
+  },
+  "keywords": [
+    "healthcare",
+    "ai",
+    "gemini",
+    "supabase",
+    "postgresql",
+    "flask"
+  ],
+  "author": "MediCare AI Team",
+  "license": "MIT"
+}
